@@ -1,0 +1,125 @@
+import com.thoughtworks.selenium.*;
+
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
+
+import java.util.regex.Pattern;
+
+public class LoginPageTest {
+	
+	private static Selenium selenium;
+	
+	//private static Settings_File accountSettings; 					//This code is frozen until you create a login and password, and store in to the settings.xml
+
+	@BeforeClass
+	public static void setUp() throws Exception {
+		
+		selenium = new DefaultSelenium("localhost", 4444, "*chrome", "http://www.vpl.ca/");
+		selenium.start();
+		//accountSettings = new Settings_File("settings.xml");			//This code is frozen until you create a login and password, and store in to the settings.xml
+	}
+	
+	
+	@Test
+	public void testLoginInvalidUsernameInvalidPin() throws Exception {
+		
+		LoginPage LoginPage = new LoginPage(selenium);
+		
+		LoginPage.open();
+						
+		LoginPage.typeUsername("123456");
+		
+		LoginPage.typePin("abc");
+		
+		LoginPage.logIn();
+			
+		assertTrue(LoginPage.countErrorPopup()>0);					
+		
+	}
+	
+	
+	@Test
+	public void testLoginInvalidUsernameCorrectPin() throws Exception {
+		
+		LoginPage LoginPage = new LoginPage(selenium);
+		
+		LoginPage.open();
+		
+		LoginPage.typeUsername("123456");
+		
+		//LoginPage.typePin(accountSettings.getFieldValue("password"));		//This code is frozen until you create a login and password, and store in to the settings.xml
+		
+		LoginPage.logIn();
+		
+		assertTrue(LoginPage.countErrorPopup()>0);
+		
+				
+	}
+	
+	@Test
+	public void testLoginCorrectUsernameInvalidPin() throws Exception {
+		
+		LoginPage LoginPage = new LoginPage(selenium);
+		
+		LoginPage.open();
+		
+		//LoginPage.typeUsername(accountSettings.getFieldValue("username"));		//This code is frozen until you create a login and password, and store in to the settings.xml
+		
+		LoginPage.typePin("abc");
+		
+		LoginPage.logIn();
+			
+		assertTrue(LoginPage.countErrorPopup()>0);
+				
+				
+	}
+	
+	@Test
+	public void testLoginNoUsernameNoPin() throws Exception {
+		
+		LoginPage LoginPage = new LoginPage(selenium);
+		
+		LoginPage.open();
+		
+		LoginPage.typeUsername("");
+		
+		LoginPage.typePin("");
+		
+		LoginPage.logIn();
+		
+		assertTrue(LoginPage.countErrorPopup()>0);
+				
+		
+	}
+	
+	@Test
+	public void testLoginCorrectUsernameCorrectPin() throws Exception {
+				
+		LoginPage LoginPage = new LoginPage(selenium);
+		
+		LoginPage.open();
+		
+		//LoginPage.typeUsername(accountSettings.getFieldValue("username"));		//This code is frozen until you create a login and password, and store in to the settings.xml
+		
+		//LoginPage.typePin(accountSettings.getFieldValue("password"));			//This code is frozen until you create a login and password, and store in to the settings.xml
+		
+		LoginPage.logIn();
+				
+		assertTrue(LoginPage.countErrorPopup() == 0);
+		
+		selenium.deleteAllVisibleCookies();
+				
+		
+	}
+		
+	@AfterClass
+	public static void tearDown() throws Exception {
+		selenium.stop();
+	}
+}
+		
