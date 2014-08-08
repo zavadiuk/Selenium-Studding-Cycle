@@ -1,0 +1,44 @@
+import com.thoughtworks.selenium.*;
+public class LoginPage {
+	
+private Selenium selenium;
+
+public LoginPage(Selenium selenium){
+	this.selenium = selenium;
+}
+	
+public void open() throws InterruptedException {
+	
+		selenium.open("/");
+		
+		selenium.click("//div[@class='box1']/h4/a");
+		
+		selenium.waitForPageToLoad("30000");
+		
+		Thread.sleep(2000);
+		
+		selenium.click("//div[@class='content']/a");
+		
+		selenium.waitForPageToLoad("30000");
+	}
+	
+public void typeUsername(String usernameValue) {
+		selenium.type("//input[@class='field_username text' and @name='name']", usernameValue);
+	} 
+	
+public void typePin(String pinValue) {
+		selenium.type("//input[@class='text' and @name='user_pin']", pinValue );
+	}
+	
+public void logIn() {
+		selenium.click("//input[@class='submit_button' and @name='commit']");
+		selenium.waitForPageToLoad("30000");
+	}
+	
+public Integer countErrorPopup() {
+		Number countErrorPopup;
+		countErrorPopup = selenium.getXpathCount("//div[@class='top_message']/p");
+		return countErrorPopup.intValue();
+	}
+
+}
