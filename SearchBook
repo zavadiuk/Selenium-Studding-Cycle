@@ -1,0 +1,62 @@
+package EGVL;
+import com.thoughtworks.selenium.*;
+
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.testng.annotations.TestInstance;
+
+import static org.junit.Assert.*;
+
+import java.util.regex.Pattern;
+
+public class SearchBook {
+	private static Selenium selenium;
+
+	@BeforeClass
+	public static void setUp() throws Exception {
+		selenium = new DefaultSelenium("localhost", 4444, "*chrome", "http://www.egvpl.org/");
+		selenium.start();
+	}
+
+	@Ignore
+	public void testSearchBook() throws Exception {
+		selenium.open("/");
+		selenium.type("id=q", "book");
+		selenium.click("name=sa");
+		selenium.waitForPageToLoad("30000");
+		
+		String pageTitle = selenium.getTitle();
+		System.out.println("The page title is: "+pageTitle);
+		assertEquals("the search page title is not correct!", "Elk Grove Village Public Library Horizon Information Portal", pageTitle);
+		
+		
+		
+		
+		
+	}
+	
+	@Test
+	public void testSearchBook1() throws Exception {
+		selenium.open("/default.htm");
+		selenium.type("id=q", "java");
+		selenium.click("name=sa");
+		selenium.waitForPageToLoad("30000");
+		
+		String itemsCount = selenium.getText("//a[@class='normalBlackFont2']");
+		
+		itemsCount = itemsCount.substring(itemsCount.length() );
+		
+		assertTrue("Result count < 0!", Integer.parseInt(itemsCount) > 0);
+		
+		
+	}
+
+	@AfterClass
+	public static void tearDown() throws Exception {
+		selenium.stop();
+	}
+}
